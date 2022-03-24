@@ -16,6 +16,9 @@ export default function Transaction({
   decoder
 }: Props) {
   const [decoding, setDecoding] = useState<Codec.CalldataDecoding | undefined>();
+  const [
+    showRawTransaction, setShowRawTransaction
+  ] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     if (!decoder) {
@@ -28,15 +31,14 @@ export default function Transaction({
       from: transaction.from,
       input: transaction.data,
       value: transaction.value
-    })
-      .then(setDecoding);
+    }).then((decoding) => {
+      console.debug("decoding %o", decoding);
+      if (decoding.kind !== "unknown") {
+        setDecoding(decoding);
+      }
+    });
   }, [transaction, decoder]);
 
-
-  console.debug("decoding %o", decoding);
-  if (decoding) {
-    console.log(inspect(new Codec.Export.CalldataDecodingInspector(decoding)));
-  }
 
   const decodedTransaction = decoding && (
     <pre>
@@ -48,7 +50,33 @@ export default function Transaction({
   return (
     <div>
       {decodedTransaction}
-      <ReactJson name="transaction" src={transaction} />
+      <details
+        open={
+          showRawTransaction === undefined
+            ? !decoding
+            : showRawTransaction
+        }
+        onKeyDown={({ key }) => {
+          if ([" ", "return"].includes(key)) {
+            setShowRawTransaction(
+              showRawTransaction === undefined
+                ? !!decoding
+                : !showRawTransaction
+            );
+          }
+        }}
+        onClick={() => {
+          setShowRawTransaction(
+            showRawTransaction === undefined
+              ? !!decoding
+              : !showRawTransaction
+          );
+        }}
+      >
+        <summary>Raw transaction</summary>
+
+        <ReactJson name="transaction" src={transaction} />
+      </details>
     </div>
   );
 
