@@ -42,7 +42,10 @@ export const startWebSocketServer = (options: ServerOptions) => {
   });
 };
 
-export const createMessage = (type: string, payload: any): Message => {
+export const createMessage = <M extends Message>(
+  type: M["type"],
+  payload: M["payload"]
+): Message => {
   const id = Math.random();
   return { id, type, payload };
 };

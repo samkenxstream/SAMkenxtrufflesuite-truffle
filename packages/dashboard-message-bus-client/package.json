@@ -1,0 +1,46 @@
+{
+  "name": "@truffle/dashboard-message-bus-client",
+  "version": "0.1.0-0",
+  "description": "Client library for accessing the truffle dashboard's message bus",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "yarn build"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/trufflesuite/truffle/tree/master/packages/dashboard-message-bus-client#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trufflesuite/truffle.git",
+    "directory": "packages/dashboard-message-bus-client"
+  },
+  "bugs": {
+    "url": "https://github.com/trufflesuite/truffle/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "ethereum",
+    "etherscan",
+    "ipfs",
+    "solidity",
+    "verify-source",
+    "sourcify",
+    "compile"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "isomorphic-ws": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "typescript": "^4.1.4"
+  }
+}
