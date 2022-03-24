@@ -293,6 +293,11 @@ export class CalldataDecodingInspector {
   constructor(decoding: CalldataDecoding) {
     this.decoding = decoding;
   }
+
+  inspect(...args: any[]): string {
+    return this[util.inspect.custom].bind(this)(...args);
+  }
+
   [util.inspect.custom](depth: number | null, options: InspectOptions): string {
     switch (this.decoding.kind) {
       case "function":

@@ -5,11 +5,13 @@ import {
   isDashboardProviderMessage,
   isInvalidateMessage,
   isDebugMessage,
+  isWorkflowCompileResultMessage,
   Message,
   base64ToJson
 } from "@truffle/dashboard-message-bus";
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
+import type { WorkflowCompileResult } from "@truffle/compile-common";
 import { getPorts, respond } from "./utils/utils";
 import Header from "./components/Header/Header";
 import DashboardProvider from "./components/DashboardProvider/DashboardProvider";
@@ -23,7 +25,9 @@ function Dashboard() {
   const [dashboardProviderRequests, setDashboardProviderRequests] = useState<
     DashboardProviderMessage[]
   >([]);
-
+  const [workflowCompileResult, setWorkflowCompileResult] = useState<
+    WorkflowCompileResult | undefined
+  >();
   const { chainId } = useWeb3React();
 
   useEffect(() => {
@@ -67,6 +71,10 @@ function Dashboard() {
           setDashboardProviderRequests(previousRequests =>
             previousRequests.filter(request => request.id !== message.payload)
           );
+        } else if (isWorkflowCompileResultMessage(message)) {
+          const { payload: { result } } = message;
+          setWorkflowCompileResult(result);
+          respond({ id: message.id }, connectedSocket);
         } else if (isDebugMessage(message)) {
           const { payload } = message;
           console.log(payload.message);
@@ -97,6 +105,7 @@ function Dashboard() {
           socket={socket}
           requests={dashboardProviderRequests}
           setRequests={setDashboardProviderRequests}
+          workflowCompileResult={workflowCompileResult}
         />
       )}
     </div>

@@ -2,6 +2,7 @@ import WebSocket from "isomorphic-ws";
 import { useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { providers } from "ethers";
+import type { WorkflowCompileResult } from "@truffle/compile-common";
 import {
   handleDashboardProviderRequest,
   isInteractiveRequest,
@@ -11,6 +12,7 @@ import {
 import Card from "../common/Card";
 import IncomingRequest from "./IncomingRequest";
 import type { DashboardProviderMessage } from "@truffle/dashboard-message-bus";
+import { useDecoder, DecoderContext } from "../../decoding";
 
 interface Props {
   paused: boolean;
@@ -21,9 +23,16 @@ interface Props {
       | ((requests: DashboardProviderMessage[]) => DashboardProviderMessage[])
   ) => void;
   socket: WebSocket;
+  workflowCompileResult: WorkflowCompileResult | undefined;
 }
 
-function DashboardProvider({ paused, socket, requests, setRequests }: Props) {
+function DashboardProvider({
+  paused,
+  socket,
+  requests,
+  setRequests,
+  workflowCompileResult
+}: Props) {
   const { account, library } = useWeb3React<providers.Web3Provider>();
 
   useEffect(() => {
@@ -54,6 +63,11 @@ function DashboardProvider({ paused, socket, requests, setRequests }: Props) {
       });
   }, [paused, requests, setRequests, socket, account, library]);
 
+  const decoder = useDecoder({
+    workflowCompileResult,
+    provider: library?.provider
+  });
+
   const incomingRequests =
     account && library && socket
       ? requests
@@ -71,7 +85,9 @@ function DashboardProvider({ paused, socket, requests, setRequests }: Props) {
   return (
     <div className="flex justify-center items-center py-20">
       <div className="mx-3 w-3/4 max-w-4xl h-2/3">
-        <Card header="Incoming Requests" body={incomingRequests} />
+        <DecoderContext.Provider value={decoder}>
+          <Card header="Incoming Requests" body={incomingRequests} />
+        </DecoderContext.Provider>
       </div>
     </div>
   );

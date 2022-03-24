@@ -3,6 +3,8 @@ import ReactJson from "react-json-view";
 import { handleDashboardProviderRequest, respond } from "../../utils/utils";
 import Button from "../common/Button";
 import Card from "../common/Card";
+import Transaction from "./Transaction";
+import { DecoderContext } from "../../decoding";
 import { DashboardProviderMessage } from "@truffle/dashboard-message-bus";
 
 interface Props {
@@ -52,7 +54,12 @@ function IncomingRequest({ provider, socket, request, setRequests }: Props) {
       case "eth_sendTransaction":
       case "eth_signTransaction": {
         const [transaction] = request.payload.params;
-        return <ReactJson name="transaction" src={transaction as any} />;
+        return <DecoderContext.Consumer>{decoder => (
+          <Transaction
+            transaction={transaction}
+            decoder={decoder}
+            />
+        )}</DecoderContext.Consumer>;
       }
       case "eth_signTypedData_v1":
       case "eth_signTypedData": {

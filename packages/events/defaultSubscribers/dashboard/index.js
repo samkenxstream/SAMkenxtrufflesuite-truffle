@@ -26,6 +26,16 @@ module.exports = {
         });
       }
     ],
+    "compile:succeed": [
+      async function ({ result }) {
+        await this.messageBus.sendAndAwait({
+          type: "workflow-compile-result",
+          payload: {
+            result
+          }
+        });
+      }
+    ],
     "rpc:request": [
       function (event) {
         const { payload } = event;

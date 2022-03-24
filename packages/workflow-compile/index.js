@@ -80,6 +80,7 @@ const WorkflowCompile = {
     if (config.events) {
       config.events.emit("compile:succeed", {
         contractsBuildDirectory: config.contracts_build_directory,
+        result: { contracts, compilations },
         compilers
       });
     }
