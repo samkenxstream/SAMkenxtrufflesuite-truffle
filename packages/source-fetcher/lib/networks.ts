@@ -17,6 +17,8 @@ export const networkNamesById: { [id: number]: string } = {
   421613: "goerli-arbitrum",
   137: "polygon",
   80001: "mumbai-polygon",
+  1101: "zkevm-polygon",
+  1442: "testnet-zkevm-polygon",
   100: "gnosis", //formerly known as xdai
   10200: "chiado-gnosis",
   300: "optimism-gnosis", //optimism on gnosis, not vice versa
@@ -64,7 +66,7 @@ export const networkNamesById: { [id: number]: string } = {
   338: "testnet-cronos",
   199: "bttc",
   1029: "donau-bttc",
-  1024: "clover",
+  1024: "clover", //not presently supported by either fetcher, but formerly by etherscan
   44: "crab-darwinia",
   43: "pangolin-darwinia",
   9001: "evmos",
